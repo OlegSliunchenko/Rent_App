@@ -1,0 +1,23 @@
+.addButtonStyle {
+    border: none;
+    background-color: orange;
+    font-weight: bold;
+    font-size: 80%;
+    text-align: center;
+    text-decoration: none;
+    height: 75%;
+    width: 11%;
+    border-radius: 20px;
+    margin-right: 25%;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.buttonDefault{
+    background-color: orange;
+    color: black;
+    border: 2px solid orange;
+}
+.buttonDefault:hover{
+    background-color: white;
+    color: darkorange;
+}

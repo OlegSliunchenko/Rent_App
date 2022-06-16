@@ -1,0 +1,21 @@
+.formSelf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 18px;
+    width: 100%;
+    margin-left: 10%;
+}
+
+.inputButton {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 5%;
+    margin-left: 20%;
+    background-color: burlywood;
+}
+
+.inputfield {
+    width: 90%;
+    height: 20px;
+}

@@ -1,0 +1,48 @@
+.block0 {
+    background-color: darkgreen;
+    height: 100%;
+    width: 100%;
+}
+
+.block1 {
+    background-color: dodgerblue;
+    height: 5%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 40px;
+}
+
+.block2 {
+    background-color: red;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.block3 {
+    background-color: bisque;
+    height: 100%;
+    width: 75%;
+}
+
+.block4 {
+    background-color: blueviolet;
+    height: 100%;
+    width: 25%;
+}
+
+.formContainer {
+    position: absolute;
+    width: 30%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: paleturquoise;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+}

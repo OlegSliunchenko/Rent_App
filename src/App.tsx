@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Container from "./components/Container";
+import Button from "./components/Button";
+import ApartmentForm from "./components/CreateApartmentForm";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    let [formState, setFormState] = useState(false);
+    let formSummonHandler = () => {
+        setFormState(true)
+    };
+        let FORM;
+    if (formState == true){
+        FORM = <Container divStyle={'formContainer'}><ApartmentForm onClick={formHide()} /></Container>
+    };
+    console.log(formState);
+    return (
+        <Container divStyle="block0">
+            {FORM}
+            <Container divStyle="block1">
+                <Button
+                    onClick={() => {
+                        formSummonHandler()
+                    }}
+                                        divStyle={'addButtonStyle buttonDefault'}
+                    name={'Здати в Оренду +'}
+                />
+            </Container>
+            <Container divStyle="block2">
+                <Container divStyle="block3">
+                    test2
+                </Container>
+                <Container divStyle="block4">
+                    test3
+                </Container>
+            </Container>
+
+        </Container>
+    );
 }
 
 export default App;
