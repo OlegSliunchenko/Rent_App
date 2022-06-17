@@ -1,19 +1,18 @@
 import '../css/form.css'
-import {useState} from "react";
 
-export default function ApartmentForm(onClick:any) {
-        return (
+export default function ApartmentForm({submitForm}: any) {
+    return (
         <form className={'formSelf'}>
-            Title: <input className={'inputfield'}/>
-            City: <input className={'inputfield'}/>
-            Rooms: <input className={'inputfield'}/>
-            Price: <input className={'inputfield'}/>
+            Title: <input className={'inputField'} id={'title'} value={''}/>
+            Address: <input className={'inputField'} id={'address'} value={''}/>
+            Rooms: <input className={'inputField'} id={'rooms'} value={''}/>
+            Price: <input className={'inputField'} id={'price'} value={''}/>
             <input
                 type={"button"}
                 title={'Add announcement'}
                 value={'Add announcement'}
                 className={'inputButton'}
-                onClick={onClick}
+                onClick={submitForm}
             />
         </form>
     );

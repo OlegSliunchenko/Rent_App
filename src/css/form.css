@@ -13,9 +13,12 @@
     margin-top: 5%;
     margin-left: 20%;
     background-color: burlywood;
+    height: 35px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
-.inputfield {
+.inputField {
     width: 90%;
     height: 20px;
 }

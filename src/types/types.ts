@@ -2,7 +2,7 @@ export type ContainerType = {
     divStyle: string;
     children: any;
 };
-export type AppartmentType = {
+export type ApartmentType = {
     title: string;
     address: string;
     price: number;
@@ -11,6 +11,6 @@ export type AppartmentType = {
 export type ButtonType = {
     divStyle: string;
     name: string;
-    onClick: () => void;
+    handler: () => void;
 
 };
