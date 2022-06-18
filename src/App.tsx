@@ -1,29 +1,31 @@
 import React, {useContext, useState} from 'react';
 import Container from "./components/Container";
 import Button from "./components/Button";
-import ApartmentForm from "./components/CreateApartmentForm";
-import {ApartmentListContext, ApartmentListProvider} from "./utils/contextList";
+import ApartmentFormComponent from "./components/ApartmentFormComponent";
+import {ApartmentListContext, ApartmentListProvider} from "./utils/provider";
 import ApartmentList from "./components/ApartmentList";
-import ApartmentItem from "./data/apartmentItem";
+import ApartmentModel from "./data/ApartmentModel/ApartmentModel";
+import {ApartmentContextType} from "./utils/providerTypes";
+import {IApartmentFormData} from "./data/ApartmentModel/types";
 
 function App() {
-    let [formState, setFormState] = useState(false);
-    let formSummonHandler = () => {
+    const [formState, setFormState] = useState(false);
+    const {setList} = useContext(ApartmentListContext) as ApartmentContextType;
+        const formSummonHandler = () => {
         setFormState(true)
     };
-    let formHide = () => {
-        let Apartment = new (ApartmentItem as any)(
-            {
-                title = document.getElementById('title').value;
-                address = document.getElementById('address').value;
-                rooms = document.getElementById('rooms').value;
-                price = document.getElementById('price').value;
-            }
+    const handleFormSubmit = (obj: IApartmentFormData): void => {
+        const apartmentModel = new ApartmentModel(
+            obj.title,
+            obj.address,
+            +obj.rooms,
+            +obj.price,
         );
-        let {setList} = useContext(ApartmentListContext);
-        setList(apartmentList.push(Apartment))
-
-        setFormState(false)
+        setList(state => [
+            ...state,
+            apartmentModel
+        ]);
+        setFormState(false);
     };
 
     return (
@@ -42,8 +44,10 @@ function App() {
                 <ApartmentListProvider>
                     <Container divStyle="block4">
                         {formState &&
-                        <Container divStyle={'formContainer'}><ApartmentForm submitForm={formHide}/></Container>}
-                        <ApartmentList></ApartmentList>
+                        <Container divStyle={'formContainer'}>
+                            <ApartmentFormComponent submitForm={handleFormSubmit}/>
+                        </Container>}
+                        <ApartmentList/>
                         test3
                     </Container>
                 </ApartmentListProvider>

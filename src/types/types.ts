@@ -7,10 +7,11 @@ export type ApartmentType = {
     address: string;
     price: number;
     rooms: number;
+    id:number;
 };
 export type ButtonType = {
     divStyle: string;
     name: string;
     handler: () => void;
-
 };
+
