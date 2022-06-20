@@ -9,7 +9,6 @@ import {ApartmentContextType} from "./utils/providerTypes";
 import {IApartmentFormData} from "./data/ApartmentModel/types";
 import {Status, Wrapper} from '@googlemaps/react-wrapper';
 
-
 function App() {
     const render = (status: Status) => {
         return <h1>{status}</h1>;
