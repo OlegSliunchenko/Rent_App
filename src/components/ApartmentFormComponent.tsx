@@ -10,8 +10,24 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         rooms: '',
         price: '',
     })
+
+    function isFormValid() {
+        const isNotEmpty = formValues.title.trim() &&
+            formValues.address.trim() &&
+            formValues.rooms.trim() &&
+            formValues.price.trim();
+
+        const isValidPrice = !isNaN(parseInt(formValues.price));
+        const isValidRooms = !isNaN(parseInt(formValues.rooms));
+
+        return isNotEmpty && isValidRooms && isValidPrice;
+    }
+
     const onSubmit = (): void => {
-        submitForm(formValues);
+        if (isFormValid()) {
+            return submitForm(formValues);
+        }
+alert('FILL ALL FIELDS')
     };
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
         const target = event.target as HTMLInputElement;
