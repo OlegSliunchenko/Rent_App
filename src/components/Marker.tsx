@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 
-export const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
+const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
     const [marker, setMarker] = useState<google.maps.Marker>();
 
     useEffect(() => {
@@ -23,3 +23,4 @@ export const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
 
     return null;
 };
+export default Marker;

@@ -5,10 +5,12 @@ import {IApartmentFormData, IApartmentFormProps} from "../data/ApartmentModel/ty
 
 const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => {
     const [formValues, setValue] = useState<IApartmentFormData>({
+        location: null,
         title: '',
         address: '',
         rooms: '',
         price: '',
+        place_id: null,
     })
 
     function isFormValid() {
@@ -23,11 +25,26 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         return isNotEmpty && isValidRooms && isValidPrice;
     }
 
-    const onSubmit = (): void => {
+    const onSubmit = (event: React.FormEvent<HTMLInputElement>): Promise<google.maps.GeocoderResponse> | void => {
+        event.preventDefault();
         if (isFormValid()) {
-            return submitForm(formValues);
+            const geocoder = new google.maps.Geocoder();
+            return geocoder.geocode({'address': formValues.address}, function handleResults(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+console.log(results)
+                    formValues.location = results && results[0].geometry.location;
+                    formValues.place_id = results && results[0].place_id;
+                    if (results && results[0].formatted_address){
+                        formValues.address = results[0].formatted_address
+                    }
+                    return submitForm(formValues);
+                } else {
+                    return alert(`Seems like ADDRESS is incorrect`);
+                }
+            }).then();
+
         }
-alert('FILL ALL FIELDS')
+        alert('FILL ALL FIELDS');
     };
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
         const target = event.target as HTMLInputElement;

@@ -8,16 +8,15 @@ interface MapProps extends google.maps.MapOptions {
     children?: React.ReactNode;
 }
 
-export const Map: React.FC<MapProps> = ({
-                                            onClick,
-                                            onIdle,
-                                            children,
-                                            style,
-                                            ...options
-                                        }) => {
+const Map: React.FC<MapProps> = ({
+                                     onClick,
+                                     onIdle,
+                                     children,
+                                     style,
+                                     ...options
+                                 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map>();
-
 
 
     useEffect(() => {
@@ -32,7 +31,7 @@ export const Map: React.FC<MapProps> = ({
         }
     }, [map, options]);
 
-   useEffect(() => {
+    useEffect(() => {
         if (map) {
             ["click", "idle"].forEach((eventName) =>
                 google.maps.event.clearListeners(map, eventName)
@@ -53,7 +52,6 @@ export const Map: React.FC<MapProps> = ({
             <div ref={ref} style={style}/>
             {React.Children.map(children, (child) => {
                 if (isValidElement(child)) {
-                    // set the map prop on the child component
                     return cloneElement(child, {map});
                 }
             })}
@@ -61,3 +59,5 @@ export const Map: React.FC<MapProps> = ({
     );
 
 };
+
+export default Map;

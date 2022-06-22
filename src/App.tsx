@@ -8,28 +8,29 @@ import ApartmentModel from "./data/ApartmentModel/ApartmentModel";
 import {ApartmentContextType} from "./utils/providerTypes";
 import {IApartmentFormData} from "./data/ApartmentModel/types";
 import {Status, Wrapper} from '@googlemaps/react-wrapper';
+import Map from './components/Map'
+import Marker from './components/Marker'
 
 function App() {
     const render = (status: Status) => {
         return <h1>{status}</h1>;
     };
     const [formState, setFormState] = useState(false);
-    const {setList} = useContext(ApartmentListContext) as ApartmentContextType;
+    const {setList, apartmentList} = useContext(ApartmentListContext) as ApartmentContextType;
 
-    const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
-    const [zoom, setZoom] = React.useState(3); // initial zoom
+    const [markers, setMarkers] = React.useState<google.maps.LatLng[]>([]);
+    const [zoom, setZoom] = React.useState(10); // initial zoom
     const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
-        lat: 0,
-        lng: 0,
+        lat: 64.921661,
+        lng: -18.543082,
     });
+    const markerInfo = new google.maps.InfoWindow()
 
     const onClick = (e: google.maps.MapMouseEvent) => {
-        // avoid directly mutating state
-        setClicks([...clicks, e.latLng!]);
+
     };
 
     const onIdle = (m: google.maps.Map) => {
-        console.log("onIdle");
         setZoom(m.getZoom()!);
         setCenter(m.getCenter()!.toJSON());
     };
@@ -43,11 +44,14 @@ function App() {
             obj.address.trim(),
             +(obj.rooms.trim()),
             +(obj.price.trim()),
+            obj.place_id!,
+            obj.location!,
         );
         setList(state => [
             ...state,
             apartmentModel
         ]);
+
         setFormState(false);
     };
 
@@ -62,28 +66,27 @@ function App() {
             </Container>
             <Container divStyle="block2">
                 <Container divStyle="block3">
-                    test2
-                    <Wrapper apiKey={"AIzaSyDBGK3WiyLYYYBmZ1iNFCVqnuNpfRMO560"} render={render}>
+                    <Wrapper apiKey={"AIzaSyDDsI_CW4CUgAkOIdkm6x_4z5mOZ5h1INA"} render={render}>
                         <Map
                             center={center}
                             onClick={onClick}
                             onIdle={onIdle}
                             zoom={zoom}
-                            style={{ flexGrow: "1", height: "100%" }}
+                            style={{flexGrow: "1", height: "100%"}}
                         >
-                            {clicks.map((latLng, i) => (
-                                <Marker key={i} position={latLng} />
+                            {apartmentList.map((item) => (
+                                <Marker key={item.id} position={item.location} />
                             ))}
                         </Map>
                     </Wrapper>
                 </Container>
                 <Container divStyle="block4">
+                    <h1>Список квартир:</h1>
                     {formState &&
                     <Container divStyle={'formContainer'}>
                         <ApartmentFormComponent submitForm={handleFormSubmit}/>
                     </Container>}
-                    <ApartmentList />
-                    test3
+                    <ApartmentList/>
                 </Container>
             </Container>
 

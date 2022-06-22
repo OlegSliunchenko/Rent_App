@@ -19,6 +19,7 @@ function useDeepCompareMemoize(value: any) {
 
     return ref.current;
 }
+
 const deepCompareEqualsForMaps = createCustomEqual(
     (deepEqual) => (a: any, b: any) => {
         if (
