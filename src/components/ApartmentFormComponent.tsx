@@ -10,6 +10,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         address: '',
         rooms: '',
         price: '',
+        ph_number: '',
         place_id: null,
     })
 
@@ -17,7 +18,8 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         const isNotEmpty = formValues.title.trim() &&
             formValues.address.trim() &&
             formValues.rooms.trim() &&
-            formValues.price.trim();
+            formValues.price.trim() &&
+            formValues.ph_number;
 
         const isValidPrice = !isNaN(parseInt(formValues.price));
         const isValidRooms = !isNaN(parseInt(formValues.rooms));
@@ -57,9 +59,10 @@ console.log(results)
     return (
         <form className={'formSelf'}>
             Title: <input className={'inputField'} name={'title'} value={formValues.title} onChange={onChange}/>
-            Address: <input className={'inputField'} name={'address'} value={formValues.address} onChange={onChange}/>
-            Rooms: <input className={'inputField'} name={'rooms'} value={formValues.rooms} onChange={onChange}/>
-            Price: <input className={'inputField'} name={'price'} value={formValues.price} onChange={onChange}/>
+            Address: <input placeholder={'City, Street, Building number'} className={'inputField'} name={'address'} value={formValues.address} onChange={onChange}/>
+            Rooms: <input placeholder={'number'} className={'inputField'} name={'rooms'} value={formValues.rooms} onChange={onChange}/>
+            Price: <input placeholder={'number'} className={'inputField'} name={'price'} value={formValues.price} onChange={onChange}/>
+            Phone Number: <input placeholder={'+380 xx-xxx-xx-xx'} className={'inputField'} name={'phone'} value={formValues.ph_number} onChange={onChange}/>
             <input
                 type={"button"}
                 title={'Add announcement'}

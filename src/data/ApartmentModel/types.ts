@@ -3,6 +3,7 @@ export interface IApartmentFormData {
     title: string;
     address: string;
     rooms: string;
+    ph_number: string
     price: string;
     place_id: string | null;
 }

@@ -21,10 +21,9 @@ function App() {
     const [markers, setMarkers] = React.useState<google.maps.LatLng[]>([]);
     const [zoom, setZoom] = React.useState(10); // initial zoom
     const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
-        lat: 64.921661,
-        lng: -18.543082,
+        lat: 50.46905208843427,
+        lng: 30.498326559846326,
     });
-    const markerInfo = new google.maps.InfoWindow()
 
     const onClick = (e: google.maps.MapMouseEvent) => {
 
@@ -44,6 +43,7 @@ function App() {
             obj.address.trim(),
             +(obj.rooms.trim()),
             +(obj.price.trim()),
+            +(obj.ph_number.trim()),
             obj.place_id!,
             obj.location!,
         );
