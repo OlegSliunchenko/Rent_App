@@ -1,97 +1,81 @@
-import React, {useContext, useState} from 'react';
-import Container from "./components/Container";
-import Button from "./components/Button";
-import ApartmentFormComponent from "./components/ApartmentFormComponent";
-import {ApartmentListContext} from "./utils/provider";
-import ApartmentList from "./components/ApartmentList";
-import ApartmentModel from "./data/ApartmentModel/ApartmentModel";
-import {ApartmentContextType} from "./utils/providerTypes";
-import {IApartmentFormData} from "./data/ApartmentModel/types";
-import {Status, Wrapper} from '@googlemaps/react-wrapper';
-import Map from './components/Map'
-import Marker from './components/Marker'
+import React from 'react';
+import {
+  GoogleMap,
+  Marker,
+  MarkerClusterer,
+  useJsApiLoader,
+} from '@react-google-maps/api';
 
-function App() {
-    const render = (status: Status) => {
-        return <h1>{status}</h1>;
-    };
-    const [formState, setFormState] = useState(false);
-    const {setList, apartmentList} = useContext(ApartmentListContext) as ApartmentContextType;
+const containerStyle = {
+  width: '400px',
+  height: '400px',
+};
 
-    const [markers, setMarkers] = React.useState<google.maps.LatLng[]>([]);
-    const [zoom, setZoom] = React.useState(10); // initial zoom
-    const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
-        lat: 50.46905208843427,
-        lng: 30.498326559846326,
-    });
+const center = {
+  lat: -3.745,
+  lng: -38.523,
+};
 
-    const onClick = (e: google.maps.MapMouseEvent) => {
+const locations = [
+  { lat: -31.56391, lng: 147.154312 },
+  { lat: -33.718234, lng: 150.363181 },
+  { lat: -33.727111, lng: 150.371124 },
+  { lat: -33.848588, lng: 151.209834 },
+  { lat: -33.851702, lng: 151.216968 },
+  { lat: -34.671264, lng: 150.863657 },
+  { lat: -35.304724, lng: 148.662905 },
+  { lat: -36.817685, lng: 175.699196 },
+  { lat: -36.828611, lng: 175.790222 },
+  { lat: -37.75, lng: 145.116667 },
+  { lat: -37.759859, lng: 145.128708 },
+  { lat: -37.765015, lng: 145.133858 },
+  { lat: -37.770104, lng: 145.143299 },
+  { lat: -37.7737, lng: 145.145187 },
+  { lat: -37.774785, lng: 145.137978 },
+  { lat: -37.819616, lng: 144.968119 },
+  { lat: -38.330766, lng: 144.695692 },
+  { lat: -39.927193, lng: 175.053218 },
+  { lat: -41.330162, lng: 174.865694 },
+  { lat: -42.734358, lng: 147.439506 },
+  { lat: -42.734358, lng: 147.501315 },
+  { lat: -42.735258, lng: 147.438 },
+  { lat: -43.999792, lng: 170.463352 },
+];
 
-    };
+function MyComponent() {
+  const createKey = (location: any) => {
+    return location.lat + location.lng;
+  };
 
-    const onIdle = (m: google.maps.Map) => {
-        setZoom(m.getZoom()!);
-        setCenter(m.getCenter()!.toJSON());
-    };
+  const options = {
+    imagePath:
+      'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  };
 
-    const formSummonHandler = () => {
-        setFormState(true)
-    };
-    const handleFormSubmit = (obj: IApartmentFormData): void => {
-        const apartmentModel = new ApartmentModel(
-            obj.title.trim(),
-            obj.address.trim(),
-            +(obj.rooms.trim()),
-            +(obj.price.trim()),
-            +(obj.ph_number.trim()),
-            obj.place_id!,
-            obj.location!,
-        );
-        setList(state => [
-            ...state,
-            apartmentModel
-        ]);
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyDDsI_CW4CUgAkOIdkm6x_4z5mOZ5h1INA',
+  });
 
-        setFormState(false);
-    };
-
-    return (
-        <Container divStyle="block0">
-            <Container divStyle="block1">
-                <Button
-                    handler={formSummonHandler}
-                    divStyle={'addButtonStyle buttonDefault'}
-                    name={'Здати в Оренду +'}
-                />
-            </Container>
-            <Container divStyle="block2">
-                <Container divStyle="block3">
-                    <Wrapper apiKey={"AIzaSyDDsI_CW4CUgAkOIdkm6x_4z5mOZ5h1INA"} render={render}>
-                        <Map
-                            center={center}
-                            onClick={onClick}
-                            onIdle={onIdle}
-                            zoom={zoom}
-                            style={{flexGrow: "1", height: "100%"}}
-                        >
-                            {apartmentList.map((item) => (
-                                <Marker key={item.id} position={item.location} />
-                            ))}
-                        </Map>
-                    </Wrapper>
-                </Container>
-                <Container divStyle="block4">
-                    <h1>Список квартир:</h1>
-                    {formState &&
-                    <Container divStyle={'formContainer'}>
-                        <ApartmentFormComponent submitForm={handleFormSubmit}/>
-                    </Container>}
-                    <ApartmentList/>
-                </Container>
-            </Container>
-
-        </Container>
-    );
+  return isLoaded ? (
+    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+      <MarkerClusterer options={options}>
+        {(clusterer) =>
+          // @ts-ignore
+          locations.map<Marker>((location) => (
+            <Marker
+              key={createKey(location)}
+              position={location}
+              clusterer={clusterer}
+            />
+          ))
+        }
+      </MarkerClusterer>
+      <></>
+    </GoogleMap>
+  ) : (
+    <></>
+  );
 }
 
-export default App;
+export default React.memo(MyComponent);

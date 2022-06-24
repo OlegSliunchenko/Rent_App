@@ -1,6 +1,6 @@
 export type ContainerType = {
-    divStyle?: string;
-    children?: any;
+  divStyle?: string;
+  children?: any;
 };
 // export type ApartmentType = {
 //     title: string;
@@ -10,8 +10,7 @@ export type ContainerType = {
 //     id:number;
 // };
 export type ButtonType = {
-    divStyle: string;
-    name: string;
-    handler: () => void;
+  divStyle: string;
+  name: string;
+  handler: () => void;
 };
-
