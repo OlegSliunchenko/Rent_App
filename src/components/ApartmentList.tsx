@@ -12,10 +12,11 @@ export default function ApartmentList(props: ContainerType) {
       <ul>
         {apartmentList.map((obj: any) => (
           <li key={obj.id.toString()} className={props.divStyle}>
-            <p>{obj.title}</p>
-            <p>{obj.address}</p>
-            <p>{obj.rooms}</p>
-            <p>{obj.price}</p>
+            <p><b>Title:</b> {obj.title}</p>
+            <p><b>Address:</b><br/> {obj.address}</p>
+            <p><b>Rooms:</b> {obj.rooms}</p>
+            <p><b>Price:</b> {obj.price}</p>
+            <p><b>Phone Number:</b> {obj.ph_number}</p>
           </li>
         ))}
       </ul>

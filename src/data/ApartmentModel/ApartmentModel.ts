@@ -5,7 +5,7 @@ export default class ApartmentModel {
   address: string;
   rooms: number;
   price: number;
-  ph_number: string;
+  ph_number: number;
   id: string;
   place_id: string;
   location: google.maps.LatLng;
@@ -15,7 +15,7 @@ export default class ApartmentModel {
     address: string,
     rooms: number,
     price: number,
-    phone_number: string,
+    phone_number: number,
     place_id: string,
     location: google.maps.LatLng
   ) {

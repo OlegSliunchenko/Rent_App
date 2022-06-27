@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import '../css/form.css';
-import {
-  IApartmentFormData,
-  IApartmentFormProps,
-} from '../data/ApartmentModel/types';
+import { IApartmentFormData, IApartmentFormProps } from '../data/ApartmentModel/types';
 
 const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
-  submitForm,
-}) => {
+                                                                 submitForm,
+                                                               }) => {
   const [formValues, setValue] = useState<IApartmentFormData>({
     location: null,
     title: '',
     address: '',
     rooms: '',
     price: '',
-    ph_number: 'abc',
+    ph_number: '',
     place_id: null,
   });
 
@@ -28,12 +25,13 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
 
     const isValidPrice = !isNaN(parseInt(formValues.price));
     const isValidRooms = !isNaN(parseInt(formValues.rooms));
+    const isValidPhoneNumber = !isNaN(parseInt(formValues.ph_number));
 
-    return isNotEmpty && isValidRooms && isValidPrice;
+    return isNotEmpty && isValidRooms && isValidPrice && isValidPhoneNumber;
   }
 
   const onSubmit = (
-    event: React.FormEvent<HTMLInputElement>
+    event: React.FormEvent<HTMLInputElement>,
   ): Promise<google.maps.GeocoderResponse> | void => {
     event.preventDefault();
     if (isFormValid()) {
@@ -43,7 +41,6 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
           { address: formValues.address },
           function handleResults(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
-              console.log(results);
               formValues.location = results && results[0].geometry.location;
               formValues.place_id = results && results[0].place_id;
               if (results && results[0].formatted_address) {
@@ -53,7 +50,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
             } else {
               return alert(`Seems like ADDRESS is incorrect`);
             }
-          }
+          },
         )
         .then();
     }
@@ -61,7 +58,6 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
   };
   const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const target = event.target as HTMLInputElement;
-    console.log(target);
     setValue((state) => ({
       ...state,
       [target.name]: target.value,
@@ -102,7 +98,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
       />
       Phone Number:{' '}
       <input
-        placeholder={'+380 xx-xxx-xx-xx'}
+        placeholder={'00380 xx-xxx-xx-xx'}
         className={'inputField'}
         name={'ph_number'}
         value={formValues.ph_number}

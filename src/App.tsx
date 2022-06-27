@@ -1,81 +1,120 @@
-import React from 'react';
-import {
-  GoogleMap,
-  Marker,
-  MarkerClusterer,
-  useJsApiLoader,
-} from '@react-google-maps/api';
+import React, { useContext, useState } from 'react';
+import { GoogleMap, InfoWindow, Marker, MarkerClusterer, useJsApiLoader } from '@react-google-maps/api';
+import Container from './components/Container';
+import Button from './components/Button';
+import ApartmentList from './components/ApartmentList';
+import ApartmentFormComponent from './components/ApartmentFormComponent';
+import { ApartmentContextType } from './utils/providerTypes';
+import { ApartmentListContext } from './utils/provider';
+import { IApartmentFormData } from './data/ApartmentModel/types';
+import ApartmentModel from './data/ApartmentModel/ApartmentModel';
 
-const containerStyle = {
-  width: '400px',
-  height: '400px',
+
+const mapBlockStyle = {
+  width: '100%',
+  height: '100%',
 };
+const mapCenter = { lat: 50.4559388795418, lng: 30.510686178292996 };
 
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
-
-const locations = [
-  { lat: -31.56391, lng: 147.154312 },
-  { lat: -33.718234, lng: 150.363181 },
-  { lat: -33.727111, lng: 150.371124 },
-  { lat: -33.848588, lng: 151.209834 },
-  { lat: -33.851702, lng: 151.216968 },
-  { lat: -34.671264, lng: 150.863657 },
-  { lat: -35.304724, lng: 148.662905 },
-  { lat: -36.817685, lng: 175.699196 },
-  { lat: -36.828611, lng: 175.790222 },
-  { lat: -37.75, lng: 145.116667 },
-  { lat: -37.759859, lng: 145.128708 },
-  { lat: -37.765015, lng: 145.133858 },
-  { lat: -37.770104, lng: 145.143299 },
-  { lat: -37.7737, lng: 145.145187 },
-  { lat: -37.774785, lng: 145.137978 },
-  { lat: -37.819616, lng: 144.968119 },
-  { lat: -38.330766, lng: 144.695692 },
-  { lat: -39.927193, lng: 175.053218 },
-  { lat: -41.330162, lng: 174.865694 },
-  { lat: -42.734358, lng: 147.439506 },
-  { lat: -42.734358, lng: 147.501315 },
-  { lat: -42.735258, lng: 147.438 },
-  { lat: -43.999792, lng: 170.463352 },
-];
-
-function MyComponent() {
-  const createKey = (location: any) => {
-    return location.lat + location.lng;
+function App() {
+  const [formState, setFormState] = useState(false);
+  const [activeMarker, setActiveMarker] = useState(null);
+  const { setList, apartmentList } = useContext(ApartmentListContext) as ApartmentContextType;
+  const createKey = (location: google.maps.LatLng) => {
+    return `${location.lat} + ${location.lng}`;
   };
-
   const options = {
     imagePath:
       'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
   };
-
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: 'AIzaSyDDsI_CW4CUgAkOIdkm6x_4z5mOZ5h1INA',
   });
+  const formSummonHandler = () => {
+    setFormState(true);
+  };
+  const handleFormSubmit = (obj: IApartmentFormData): void => {
+    const apartmentModel = new ApartmentModel(
+      obj.title.trim(),
+      obj.address.trim(),
+      +(obj.rooms.trim()),
+      +(obj.price.trim()),
+      +(obj.ph_number.trim()),
+      obj.place_id!,
+      obj.location!,
+    );
+    setList(state => [
+      ...state,
+      apartmentModel,
+    ]);
+    setFormState(false);
+  };
+  const handleActiveMarker = (marker: any) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
 
   return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-      <MarkerClusterer options={options}>
-        {(clusterer) =>
-          // @ts-ignore
-          locations.map<Marker>((location) => (
-            <Marker
-              key={createKey(location)}
-              position={location}
-              clusterer={clusterer}
-            />
-          ))
-        }
-      </MarkerClusterer>
-      <></>
-    </GoogleMap>
+    <Container divStyle={'block0'}>
+      <Container divStyle={'block1'}>
+        <Button
+          handler={formSummonHandler}
+          divStyle={'addButtonStyle buttonDefault'}
+          name={'Здати в Оренду +'}
+        />
+      </Container>
+      <Container divStyle={'block2'}>
+        <Container divStyle={'block3'}>
+          <GoogleMap mapContainerStyle={mapBlockStyle} center={mapCenter} zoom={10}>
+            <MarkerClusterer options={options}>
+              {(clusterer) =>
+                // @ts-ignore
+                apartmentList.map<google.maps.Marker>((item) => (
+                  <Marker
+                    key={createKey(item.location)}
+                    position={item.location}
+                    clusterer={clusterer}
+                    onClick={() => handleActiveMarker(createKey(item.location))}
+                  >
+                    {activeMarker === createKey(item.location) ? (
+                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                        <div>
+                          <img src='https://robohash.org/apartment.png' /><br />
+                          <ul>
+                          {apartmentList.map((item) => (
+                            <li key={item.id.toString()}>
+                            <p><b>Title:</b> {item.title}</p>
+                            <p><b>Address:</b><br/> {item.address}</p>
+                            <p><b>Rooms:</b> {item.rooms}</p>
+                            <p><b>Price:</b> {item.price}</p>
+                            <p><b>Phone Number:</b> {item.ph_number}</p>
+                          </li>))}
+                            </ul>
+                        </div>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
+                ))
+              }
+            </MarkerClusterer>
+          </GoogleMap>
+        </Container>
+        <Container divStyle={'block4'}>
+          <h1>Список квартир:</h1>
+          {formState &&
+          <Container divStyle={'formContainer'}>
+            <ApartmentFormComponent submitForm={handleFormSubmit} />
+          </Container>}
+          <ApartmentList />
+        </Container>
+      </Container>
+    </Container>
   ) : (
     <></>
   );
 }
 
-export default React.memo(MyComponent);
+export default React.memo(App);
