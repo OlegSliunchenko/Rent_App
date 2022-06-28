@@ -6,7 +6,9 @@ export interface IApartmentFormData {
   ph_number: string;
   price: string;
   place_id: string | null;
+  img_path: string;
 }
+
 export interface IApartmentFormProps {
   submitForm: (data: IApartmentFormData) => void;
 }

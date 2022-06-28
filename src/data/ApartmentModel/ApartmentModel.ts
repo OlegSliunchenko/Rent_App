@@ -9,6 +9,7 @@ export default class ApartmentModel {
   id: string;
   place_id: string;
   location: google.maps.LatLng;
+  img_path: string;
 
   constructor(
     title: string,
@@ -17,7 +18,8 @@ export default class ApartmentModel {
     price: number,
     phone_number: number,
     place_id: string,
-    location: google.maps.LatLng
+    location: google.maps.LatLng,
+    img_path:string,
   ) {
     this.title = title;
     this.address = address;
@@ -27,5 +29,6 @@ export default class ApartmentModel {
     this.place_id = place_id;
     this.id = uuidv4();
     this.location = location;
+    this.img_path = img_path;
   }
 }
