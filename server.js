@@ -1,23 +1,30 @@
-
 const express = require('express');
 const app = express();
 const multer = require('multer');
 const cors = require('cors');
 
-app.use(cors())
+app.use(cors());
+
+
+const fs = require('fs-extra')
+const dir = './tmp/images';
+
+if (!fs.ensureDirSync(dir)) {
+    fs.mkdirpSync(dir, {recursive: true});
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads')
+        cb(null, dir)
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' +file.originalname )
+        cb(null, Date.now() + '-' + file.originalname)
     }
 })
 
-const upload = multer({ storage: storage }).single('file')
+const upload = multer({storage: storage}).single('file')
 
-app.post('/upload',function(req, res) {
+app.post('/upload', function (req, res) {
 
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
@@ -25,13 +32,18 @@ app.post('/upload',function(req, res) {
         } else if (err) {
             return res.status(500).json(err)
         }
+        fs.move(`./temp/images/${req.file.filename}`, `public/${req.file.filename}`, err => {
+            if (err) return console.error(err)
+            console.log('success!')
+        })
         return res.status(200).send(req.file)
+
 
     })
 
 });
 
-app.listen(8000, function() {
+app.listen(8000, function () {
 
     console.log('App running on port 8000');
 

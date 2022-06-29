@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ApartmentListContext } from '../utils/provider';
 import { ApartmentContextType } from '../utils/providerTypes';
-import {ApartmentListMapCenter, ContainerType} from '../types/types';
+import {ApartmentListMapCenter} from '../types/types';
 import ApartmentModel from '../data/ApartmentModel/ApartmentModel';
 
 export default function ApartmentList(props: ApartmentListMapCenter) {
@@ -12,8 +12,11 @@ export default function ApartmentList(props: ApartmentListMapCenter) {
     <div>
       <ul>
         {apartmentList.map<React.ReactNode>((obj: ApartmentModel) => (
-            <a onClick={() => props.handler({lat: obj.location.lat(), lng: obj.location.lng()})}>
-          <li key={obj.id.toString()} className={props.divStyle}>
+            <a
+                key={obj.id.toString()}
+                onClick={() => props.handler({lat: obj.location.lat(), lng: obj.location.lng()})}
+            >
+          <li  className={props.divStyle}>
             <p>
               <b>Title:</b> {obj.title}
             </p>
@@ -36,4 +39,4 @@ export default function ApartmentList(props: ApartmentListMapCenter) {
       </ul>
     </div>
   );
-}
+};

@@ -6,19 +6,19 @@
     width: 100%;
     margin-left: 10%;
 }
-
 .inputButton {
     font-size: 15px;
     font-weight: bold;
-    margin-top: 5%;
-    margin-left: 20%;
+    margin: 5% 0 0 20%;
     background-color: burlywood;
     height: 35px;
     border-radius: 20px;
     cursor: pointer;
 }
-
 .inputField {
     width: 90%;
     height: 20px;
+}
+.lableField{
+    width: 100%;
 }

@@ -1,15 +1,12 @@
 import React, {useState} from 'react';
+import axios from "axios";
 import '../css/form.css';
 import {IApartmentFormData, IApartmentFormProps,} from '../data/ApartmentModel/types';
-import FileUploaderMain from './FileUploaderMain';
-import axios from "axios";
 
-const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
-                                                                   submitForm,
-                                                               }) => {
+
+const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => {
     const [filesState, setFiles] = useState(null)
 
-    console.log(filesState)
     const [formValues, setValue] = useState<IApartmentFormData>({
         location: null,
         title: '',
@@ -21,7 +18,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
         img_path: '',
     });
 
-    function isFormValid() {
+    const isFormValid = () => {
         const isNotEmpty =
             formValues.title.trim() &&
             formValues.address.trim() &&
@@ -36,43 +33,48 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
         return isNotEmpty && isValidRooms && isValidPrice && isValidPhoneNumber;
     }
 
-    const onSubmit = (
+    const getUploadedImgPath = async (): Promise<string> => {
+        const formData = new FormData();
+        formData.append('file', filesState!);
+        const {data: {path}} = await axios.post('http://127.0.0.1:8000/upload', formData);
+        return path;
+    }
+
+    const getFullAddress = async (): Promise<[string, google.maps.LatLng, string]> => {
+        const geocoder = new google.maps.Geocoder();
+        const {results: [{formatted_address, place_id, geometry: {location}}]} = await geocoder
+            .geocode(
+                {address: formValues.address});
+
+        return [place_id, location, formatted_address];
+    }
+
+    const onSubmit = async (
         event: React.FormEvent<HTMLInputElement>
-    ): Promise<google.maps.GeocoderResponse> | void => {
+    ): Promise<Promise<google.maps.GeocoderResponse> | void> => {
         event.preventDefault();
         if (isFormValid()) {
-            const geocoder = new google.maps.Geocoder();
-            const data = new FormData();
-            // @ts-ignore
-            data.append('file', filesState);
-            axios.post('http://localhost:8000/upload', data)
-                .then((event) => {
-                    console.log('Success')
-                })
-                .catch((event) => {
-                    console.log('error')
+            try {
+                const imgPath = await getUploadedImgPath();
+                const [place_id, location, formatted_address] = await getFullAddress()
+               return submitForm({
+                    location: location,
+                    title: formValues.title,
+                    address: formatted_address,
+                    rooms: formValues.rooms,
+                    ph_number: formValues.ph_number,
+                    price: formValues.price,
+                    place_id: place_id,
+                    img_path: imgPath,
                 });
-            return geocoder
-                .geocode(
-                    {address: formValues.address},
-                    function handleResults(results, status) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            formValues.location = results && results[0].geometry.location;
-                            formValues.place_id = results && results[0].place_id;
-                            if (results && results[0].formatted_address) {
-                                formValues.address = results[0].formatted_address;
-                            }
-                            return submitForm(formValues);
-                        } else {
-                            return alert(`Seems like ADDRESS is incorrect`);
-                        }
-                    }
-                )
-                .then();
-
+            } catch (e) {
+                console.log('ERROR ', e)
+            }
+            return;
         }
         alert('FILL ALL FIELDS');
     };
+
     const onChange = (event: React.FormEvent<HTMLInputElement>): void => {
         const target = event.target as HTMLInputElement;
         setValue((state) => ({
@@ -80,48 +82,71 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
             [target.name]: target.value,
         }));
     };
+
+    const onInputChange = (e: any) => {
+        setFiles(e.target.files[0]);
+    }
+
     return (
-        <form className={'formSelf'} method="post" action="#" id="#">
-            Title:{' '}
+        <div
+            className={'formSelf'}
+        >
+            <label className={'lableField'}>
+                Title:{' '}
+                <input
+                    id={'title'}
+                    className={'inputField'}
+                    name={'title'}
+                    value={formValues.title}
+                    onChange={onChange}
+                />
+            </label>
+            <label className={'lableField'}>
+                Address:{' '}
+                <input
+                    placeholder={'City, Street, Building number'}
+                    className={'inputField'}
+                    name={'address'}
+                    value={formValues.address}
+                    onChange={onChange}
+                />
+            </label>
+            <label className={'lableField'}>
+                Rooms:{' '}
+                <input
+                    placeholder={'number'}
+                    className={'inputField'}
+                    name={'rooms'}
+                    value={formValues.rooms}
+                    onChange={onChange}
+                />
+            </label>
+            <label className={'lableField'}>
+                Price:{' '}
+                <input
+                    placeholder={'number'}
+                    className={'inputField'}
+                    name={'price'}
+                    value={formValues.price}
+                    onChange={onChange}
+                />
+            </label>
+            <label className={'lableField'}>
+                Phone Number:{' '}
+                <input
+                    placeholder={'00380 xx-xxx-xx-xx'}
+                    className={'inputField'}
+                    name={'ph_number'}
+                    value={formValues.ph_number}
+                    onChange={onChange}
+                />
+            </label>
             <input
-                className={'inputField'}
-                name={'title'}
-                value={formValues.title}
-                onChange={onChange}
+                onChange={onInputChange}
+                type="file"
+                className="form-control"
+                multiple={false}
             />
-            Address:{' '}
-            <input
-                placeholder={'City, Street, Building number'}
-                className={'inputField'}
-                name={'address'}
-                value={formValues.address}
-                onChange={onChange}
-            />
-            Rooms:{' '}
-            <input
-                placeholder={'number'}
-                className={'inputField'}
-                name={'rooms'}
-                value={formValues.rooms}
-                onChange={onChange}
-            />
-            Price:{' '}
-            <input
-                placeholder={'number'}
-                className={'inputField'}
-                name={'price'}
-                value={formValues.price}
-                onChange={onChange}
-            />
-            Phone Number:{' '}
-            <input
-                placeholder={'00380 xx-xxx-xx-xx'}
-                className={'inputField'}
-                name={'ph_number'}
-                value={formValues.ph_number}
-                onChange={onChange}
-            />
-            <FileUploaderMain setFiles={setFiles}/>
             <input
                 type={'button'}
                 title={'Add announcement'}
@@ -129,8 +154,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({
                 className={'inputButton'}
                 onClick={onSubmit}
             />
-
-        </form>
+        </div>
     );
 };
 export default ApartmentFormComponent;

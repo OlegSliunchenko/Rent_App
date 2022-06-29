@@ -1,13 +1,13 @@
 import React, {useContext, useState} from 'react';
 import {GoogleMap, Marker, MarkerClusterer, useJsApiLoader} from '@react-google-maps/api';
-import Container from './components/Container';
-import Button from './components/Button';
-import ApartmentList from './components/ApartmentList';
-import ApartmentFormComponent from './components/ApartmentFormComponent';
 import {ApartmentContextType} from './utils/providerTypes';
 import {ApartmentListContext} from './utils/provider';
 import {IApartmentFormData} from './data/ApartmentModel/types';
 import ApartmentModel from './data/ApartmentModel/ApartmentModel';
+import Container from './components/Container';
+import Button from './components/Button';
+import ApartmentList from './components/ApartmentList';
+import ApartmentFormComponent from './components/ApartmentFormComponent';
 
 const mapBlockStyle = {
     width: '100%',
@@ -53,16 +53,16 @@ function App() {
     };
 
     return isLoaded ? (
-        <Container divStyle={'block0'}>
-            <Container divStyle={'block1'}>
+        <Container divStyle={'mainContainerStyle'}>
+            <Container divStyle={'headerContainerStyle'}>
                 <Button
                     handler={formSummonHandler}
                     divStyle={'addButtonStyle buttonDefault'}
                     name={'Здати в Оренду +'}
                 />
             </Container>
-            <Container divStyle={'block2'}>
-                <Container divStyle={'block3'}>
+            <Container divStyle={'mapListWraperStyle'}>
+                <Container divStyle={'mapWraperStyle'}>
                     <GoogleMap
                         mapContainerStyle={mapBlockStyle}
                         center={mapCenter}
@@ -83,7 +83,7 @@ function App() {
                         </MarkerClusterer>
                     </GoogleMap>
                 </Container>
-                <Container divStyle={'block4'}>
+                <Container divStyle={'listWraperStyle'}>
                     {formState && (
                         <Container divStyle={'formContainer'}>
                             <ApartmentFormComponent submitForm={handleFormSubmit}/>
@@ -91,18 +91,21 @@ function App() {
                     )}
                     {apartmentList.map<JSX.Element>((item) =>
                         activeMarkerId === item.id ? (
-                            <a href="#" onClick={() => {
+                            <div key={item.id.toString()} onClick={() => {
                                 setMapCenter({lat: item.location.lat(), lng: item.location.lng()})
                             }}>
                                 <div>
-                                    <a href='/#' className='close' onClick={() => setActiveMarkerId(null)}/>
+                                    <a href='/#'
+                                       className='close'
+                                       onClick={() => setActiveMarkerId(null)}
+                                    />
                                     <img
-                                        src='https://robohash.org/apartment.png'
+                                        src={`./../${item.img_path}`}
                                         alt={'No pic added'}
                                     />
                                     <br/>
                                     <ul>
-                                        <li key={item.id.toString()}>
+                                        <li>
                                             <p>
                                                 <b>Title:</b> {item.title}
                                             </p>
@@ -122,11 +125,12 @@ function App() {
                                         </li>
                                     </ul>
                                 </div>
-                            </a>
-                        ) : <><h1>Список квартир:</h1>
+                            </div>
+                        ) : <>
+                            <h1>Список квартир:</h1>
                             <ApartmentList handler={setMapCenter}/>
-                        </>)}
-
+                        </>
+                    )}
                 </Container>
             </Container>
         </Container>

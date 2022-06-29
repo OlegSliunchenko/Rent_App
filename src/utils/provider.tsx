@@ -5,13 +5,11 @@ import { ApartmentContextType } from './providerTypes';
 export const ApartmentListContext = createContext<ApartmentContextType | null>(
   null
 );
-
 type Props = {
   children?: React.ReactNode;
 };
 export const ApartmentListProvider: React.FC<Props> = ({ children }) => {
   const [apartmentList, setList] = useState<ApartmentModel[]>([]);
-
   return (
     <ApartmentListContext.Provider value={{ apartmentList, setList }}>
       {children}

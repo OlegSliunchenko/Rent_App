@@ -31,4 +31,4 @@ export default class ApartmentModel {
     this.location = location;
     this.img_path = img_path;
   }
-}
+};

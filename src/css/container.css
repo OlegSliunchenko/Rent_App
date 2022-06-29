@@ -1,11 +1,10 @@
-.block0 {
+.mainContainerStyle {
     background-color: darkgreen;
     height: 100%;
     width: 100%;
     overflow-y: scroll
 }
-
-.block1 {
+.headerContainerStyle {
     background-color: dodgerblue;
     height: 5%;
     width: 100%;
@@ -14,33 +13,28 @@
     justify-content: flex-end;
     margin-right: 40px;
 }
-
-.block2 {
+.mapListWraperStyle {
     background-color: red;
     height: inherit;
     width: 100%;
     display: flex;
     flex-direction: row;
 }
-
-.block3 {
+.mapWraperStyle {
     background-color: bisque;
     height: 100%;
     width: 75%;
 }
-
-.block4 {
+.listWraperStyle {
     background-color: blueviolet;
     height: 100%;
     width: 25%;
     overflow: scroll;
 }
-
 .mapBlockStyle {
     height: 100%;
     width: 100%;
 }
-
 .formContainer {
     position: absolute;
     width: 30%;
@@ -54,4 +48,3 @@
     transform: translate(-50%, -50%);
     border-radius: 20px 10px;
 }
-

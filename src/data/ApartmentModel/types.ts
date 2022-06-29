@@ -8,7 +8,6 @@ export interface IApartmentFormData {
   place_id: string | null;
   img_path: string;
 }
-
 export interface IApartmentFormProps {
   submitForm: (data: IApartmentFormData) => void;
 }
