@@ -20,10 +20,18 @@
 
 .inputField {
     min-width: 90%;
-    height: 10%;
+    height: 3vh;
 }
 
 .labelField {
     width: 100%;
     font-size: 14px;
+    height: 7vh;
+    padding-top: 1vh;
+}
+
+.form-control{
+    font-size: 2vh;
+    height: 5vh;
+    margin-top: 10%;
 }
