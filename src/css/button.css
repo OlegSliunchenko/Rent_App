@@ -2,7 +2,7 @@
     border: none;
     background-color: orange;
     font-weight: bold;
-    font-size: 80%;
+    font-size: 1vw;
     text-align: center;
     text-decoration: none;
     height: 75%;
@@ -12,12 +12,47 @@
     transition-duration: 0.4s;
     cursor: pointer;
 }
-.buttonDefault{
+
+.buttonDefault {
     background-color: orange;
     color: black;
     border: 2px solid orange;
 }
-.buttonDefault:hover{
+
+.buttonDefault:hover {
     background-color: white;
     color: darkorange;
+}
+
+.close {
+    position: absolute;
+    right: 32px;
+    top: 32px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+    border: none;
+    background-color: unset;
+}
+
+.close:hover {
+    opacity: 1;
+}
+
+.close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+    top: 0px;
+}
+
+.close:before {
+    transform: rotate(45deg);
+}
+
+.close:after {
+    transform: rotate(-45deg);
 }

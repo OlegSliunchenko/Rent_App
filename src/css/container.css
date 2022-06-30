@@ -1,10 +1,11 @@
-.block0 {
+.mainContainerStyle {
     background-color: darkgreen;
     height: 100%;
     width: 100%;
+    overflow-y: scroll
 }
 
-.block1 {
+.headerContainerStyle {
     background-color: dodgerblue;
     height: 5%;
     width: 100%;
@@ -14,30 +15,36 @@
     margin-right: 40px;
 }
 
-.block2 {
+.mapListWrapperStyle {
     background-color: red;
-    height: 100%;
+    height: inherit;
     width: 100%;
     display: flex;
     flex-direction: row;
 }
 
-.block3 {
+.mapWrapperStyle {
     background-color: bisque;
     height: 100%;
     width: 75%;
 }
 
-.block4 {
+.listWrapperStyle {
     background-color: blueviolet;
     height: 100%;
     width: 25%;
+    overflow: scroll;
+}
+
+.mapBlockStyle {
+    height: 100%;
+    width: 100%;
 }
 
 .formContainer {
     position: absolute;
     width: 30%;
-    height: 40%;
+    height: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
