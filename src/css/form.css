@@ -4,7 +4,8 @@
     align-items: flex-start;
     font-size: 18px;
     width: 100%;
-    margin-left: 10%;
+    padding-left: 10%;
+    padding-right: 5%;
 }
 
 .inputButton {
@@ -18,8 +19,8 @@
 }
 
 .inputField {
-    width: 90%;
-    height: 20px;
+    min-width: 90%;
+    height: 10%;
 }
 
 .labelField {

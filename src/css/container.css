@@ -43,8 +43,8 @@
 
 .formContainer {
     position: absolute;
-    width: 30%;
-    height: 50%;
+    min-width: 45%;
+    min-height: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,4 +53,5 @@
     top: 40%;
     transform: translate(-50%, -50%);
     border-radius: 20px 10px;
+    margin-top: 5%;
 }

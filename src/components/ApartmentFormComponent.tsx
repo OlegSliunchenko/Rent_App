@@ -97,7 +97,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
     };
 
     return (
-        <div className={'formSelf'}>
+        <form className={'formSelf'}>
             <label className={'labelField'}>
                 Title:{' '}
                 <input
@@ -161,7 +161,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                 className={'inputButton'}
                 onClick={onSubmit}
             />
-        </div>
+        </form>
     );
 };
 export default ApartmentFormComponent;
