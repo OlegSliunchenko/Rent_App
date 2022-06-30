@@ -7,6 +7,5 @@
   "bracketSameLine": false,
   "parser": "typescript",
   "semi": true,
-  "jsxSingleQuote": true,
-
+  "jsxSingleQuote": true
 }

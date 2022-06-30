@@ -15,12 +15,13 @@ const mapBlockStyle = {
 };
 
 function App() {
-    const [mapCenter, setMapCenter] = useState({lat: 50.4559388795418, lng: 30.510686178292996})
+    const [mapCenter, setMapCenter] = useState({
+        lat: 50.4559388795418,
+        lng: 30.510686178292996,
+    });
     const [formState, setFormState] = useState(false);
     const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null);
-    const {setList, apartmentList} = useContext(
-        ApartmentListContext,
-    ) as ApartmentContextType;
+    const {setList, apartmentList} = useContext(ApartmentListContext) as ApartmentContextType;
     const options = {
         imagePath:
             'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
@@ -41,7 +42,7 @@ function App() {
             +obj.ph_number.trim(),
             obj.place_id!,
             obj.location!,
-            obj.img_path,
+            obj.img_path
         );
         setList((state) => [...state, apartmentModel]);
         setFormState(false);
@@ -61,29 +62,31 @@ function App() {
                     name={'Здати в Оренду +'}
                 />
             </Container>
-            <Container divStyle={'mapListWraperStyle'}>
-                <Container divStyle={'mapWraperStyle'}>
+            <Container divStyle={'mapListWrapperStyle'}>
+                <Container divStyle={'mapWrapperStyle'}>
                     <GoogleMap
                         mapContainerStyle={mapBlockStyle}
                         center={mapCenter}
                         zoom={10}
                     >
                         <MarkerClusterer options={options}>
-                            {(clusterer) =>
+                            {(clusterer) => (
                                 <>
-                                    {apartmentList.map<JSX.Element>((item) => <Marker
+                                    {apartmentList.map<JSX.Element>((item) => (
+                                        <Marker
                                             key={item.id.toString()}
                                             position={item.location}
                                             clusterer={clusterer}
                                             onClick={() => handleActiveMarker(item.id)}
                                         />
-                                    )}
+                                    ))}
                                 </>
-                            }
+                            )}
                         </MarkerClusterer>
                     </GoogleMap>
                 </Container>
-                <Container divStyle={'listWraperStyle'}>
+                <Container divStyle={'listWrapperStyle'}>
+                    <h1>Список квартир:</h1>
                     {formState && (
                         <Container divStyle={'formContainer'}>
                             <ApartmentFormComponent submitForm={handleFormSubmit}/>
@@ -91,45 +94,55 @@ function App() {
                     )}
                     {apartmentList.map<JSX.Element>((item) =>
                         activeMarkerId === item.id ? (
-                            <div key={item.id.toString()} onClick={() => {
-                                setMapCenter({lat: item.location.lat(), lng: item.location.lng()})
-                            }}>
-                                <div>
-                                    <a href='/#'
-                                       className='close'
-                                       onClick={() => setActiveMarkerId(null)}
-                                    />
-                                    <img
-                                        src={`./../${item.img_path}`}
-                                        alt={'No pic added'}
-                                    />
-                                    <br/>
-                                    <ul>
-                                        <li>
-                                            <p>
-                                                <b>Title:</b> {item.title}
-                                            </p>
-                                            <p>
-                                                <b>Address:</b>
-                                                <br/> {item.address}
-                                            </p>
-                                            <p>
-                                                <b>Rooms:</b> {item.rooms}
-                                            </p>
-                                            <p>
-                                                <b>Price:</b> {item.price}
-                                            </p>
-                                            <p>
-                                                <b>Phone Number:</b> {item.ph_number}
-                                            </p>
-                                        </li>
-                                    </ul>
+                            <>
+                                <div
+                                    key={item.id.toString()}
+                                    onClick={() => {
+                                        setMapCenter({
+                                            lat: item.location.lat(),
+                                            lng: item.location.lng(),
+                                        });
+                                    }}
+                                >
+                                    <div>
+                                        <button
+                                            className='close'
+                                            onClick={() => setActiveMarkerId(null)}
+                                        />
+                                        <img
+                                            src={require(`.${item.img_path.slice(3)}`)}
+                                            style={{width: '100%', height: '200px'}}
+                                            alt={'img'}
+                                        />
+                                        <br/>
+                                        <ul>
+                                            <li>
+                                                <p>
+                                                    <b>Title:</b> {item.title}
+                                                </p>
+                                                <p>
+                                                    <b>Address:</b>
+                                                    <br/> {item.address}
+                                                </p>
+                                                <p>
+                                                    <b>Rooms:</b> {item.rooms}
+                                                </p>
+                                                <p>
+                                                    <b>Price:</b> {item.price}
+                                                </p>
+                                                <p>
+                                                    <b>Phone Number:</b> {item.ph_number}
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                        ) : <>
-                            <h1>Список квартир:</h1>
-                            <ApartmentList handler={setMapCenter}/>
-                        </>
+                            </>
+                        ) : (
+                            <>
+                                <ApartmentList handler={setMapCenter}/>
+                            </>
+                        )
                     )}
                 </Container>
             </Container>
@@ -139,4 +152,4 @@ function App() {
     );
 }
 
-export default React.memo(App);
+export default App;

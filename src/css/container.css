@@ -4,6 +4,7 @@
     width: 100%;
     overflow-y: scroll
 }
+
 .headerContainerStyle {
     background-color: dodgerblue;
     height: 5%;
@@ -13,28 +14,33 @@
     justify-content: flex-end;
     margin-right: 40px;
 }
-.mapListWraperStyle {
+
+.mapListWrapperStyle {
     background-color: red;
     height: inherit;
     width: 100%;
     display: flex;
     flex-direction: row;
 }
-.mapWraperStyle {
+
+.mapWrapperStyle {
     background-color: bisque;
     height: 100%;
     width: 75%;
 }
-.listWraperStyle {
+
+.listWrapperStyle {
     background-color: blueviolet;
     height: 100%;
     width: 25%;
     overflow: scroll;
 }
+
 .mapBlockStyle {
     height: 100%;
     width: 100%;
 }
+
 .formContainer {
     position: absolute;
     width: 30%;

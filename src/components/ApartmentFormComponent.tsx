@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from 'axios';
 import '../css/form.css';
 import {IApartmentFormData, IApartmentFormProps,} from '../data/ApartmentModel/types';
 
-
 const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => {
-    const [filesState, setFiles] = useState(null)
+    const [filesState, setFiles] = useState<File | null>(null);
 
     const [formValues, setValue] = useState<IApartmentFormData>({
         location: null,
@@ -31,33 +30,40 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         const isValidPhoneNumber = !isNaN(parseInt(formValues.ph_number));
 
         return isNotEmpty && isValidRooms && isValidPrice && isValidPhoneNumber;
-    }
+    };
 
     const getUploadedImgPath = async (): Promise<string> => {
         const formData = new FormData();
         formData.append('file', filesState!);
-        const {data: {path}} = await axios.post('http://127.0.0.1:8000/upload', formData);
+        const {
+            data: {path},
+        } = await axios.post('http://127.0.0.1:8000/upload', formData);
         return path;
-    }
+    };
 
     const getFullAddress = async (): Promise<[string, google.maps.LatLng, string]> => {
         const geocoder = new google.maps.Geocoder();
-        const {results: [{formatted_address, place_id, geometry: {location}}]} = await geocoder
-            .geocode(
-                {address: formValues.address});
+        const {
+            results: [
+                {
+                    formatted_address,
+                    place_id,
+                    geometry: {location},
+                },
+            ],
+        } = await geocoder.geocode({address: formValues.address});
 
         return [place_id, location, formatted_address];
-    }
+    };
 
-    const onSubmit = async (
-        event: React.FormEvent<HTMLInputElement>
-    ): Promise<Promise<google.maps.GeocoderResponse> | void> => {
+    const onSubmit = async (event: React.FormEvent<HTMLInputElement>):
+        Promise<Promise<google.maps.GeocoderResponse> | void> => {
         event.preventDefault();
         if (isFormValid()) {
             try {
                 const imgPath = await getUploadedImgPath();
-                const [place_id, location, formatted_address] = await getFullAddress()
-               return submitForm({
+                const [place_id, location, formatted_address] = await getFullAddress();
+                return submitForm({
                     location: location,
                     title: formValues.title,
                     address: formatted_address,
@@ -68,7 +74,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                     img_path: imgPath,
                 });
             } catch (e) {
-                console.log('ERROR ', e)
+                console.log('ERROR ', e);
             }
             return;
         }
@@ -83,15 +89,16 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
         }));
     };
 
-    const onInputChange = (e: any) => {
-        setFiles(e.target.files[0]);
-    }
+    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.files![0].type === 'image/jpeg' ||
+        e.target.files![0].type === 'image/png'
+            ? setFiles(e.target.files![0])
+            : alert('Type of Img does not match');
+    };
 
     return (
-        <div
-            className={'formSelf'}
-        >
-            <label className={'lableField'}>
+        <div className={'formSelf'}>
+            <label className={'labelField'}>
                 Title:{' '}
                 <input
                     id={'title'}
@@ -101,7 +108,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                     onChange={onChange}
                 />
             </label>
-            <label className={'lableField'}>
+            <label className={'labelField'}>
                 Address:{' '}
                 <input
                     placeholder={'City, Street, Building number'}
@@ -111,7 +118,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                     onChange={onChange}
                 />
             </label>
-            <label className={'lableField'}>
+            <label className={'labelField'}>
                 Rooms:{' '}
                 <input
                     placeholder={'number'}
@@ -121,7 +128,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                     onChange={onChange}
                 />
             </label>
-            <label className={'lableField'}>
+            <label className={'labelField'}>
                 Price:{' '}
                 <input
                     placeholder={'number'}
@@ -131,7 +138,7 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
                     onChange={onChange}
                 />
             </label>
-            <label className={'lableField'}>
+            <label className={'labelField'}>
                 Phone Number:{' '}
                 <input
                     placeholder={'00380 xx-xxx-xx-xx'}
@@ -143,8 +150,8 @@ const ApartmentFormComponent: React.FC<IApartmentFormProps> = ({submitForm}) => 
             </label>
             <input
                 onChange={onInputChange}
-                type="file"
-                className="form-control"
+                type='file'
+                className='form-control'
                 multiple={false}
             />
             <input
