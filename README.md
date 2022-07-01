@@ -7,5 +7,5 @@
 5. In console run:
    1. `npm install`
    2. `npm run start`
-   3. `nodemon server.js` (run this comand in separate terminal window in the same folder)
+   3. `node_modules/.bin/nodemon server.js` (run this comand in separate terminal window in the same folder)
 6. Open `http://lokalhost3000` in your browser!
